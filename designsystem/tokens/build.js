@@ -13,7 +13,13 @@ function processValue(value, tokens) {
   return value;
 }
 
-function processTokens(obj, tokens, prefix = "", cssVariables = []) {
+function processTokens(
+  obj,
+  tokens,
+  prefix = "",
+  cssVariables = [],
+  extraPrefix = ""
+) {
   for (const key in obj) {
     const value = obj[key];
     const newPrefix = prefix ? `${prefix}-${key}` : key;
@@ -21,7 +27,8 @@ function processTokens(obj, tokens, prefix = "", cssVariables = []) {
     if (typeof value === "object" && !value.hasOwnProperty("value")) {
       processTokens(value, tokens, newPrefix, cssVariables);
     } else {
-      const cssVarName = `--sd-${newPrefix}`;
+      const extra = extraPrefix ? `${extraprefix}-` : "";
+      const cssVarName = `--sd-${extra}${newPrefix}`;
       const cssVarValue = processValue(value.value, tokens);
       cssVariables.push(`${cssVarName}: ${cssVarValue};`);
     }
@@ -36,11 +43,12 @@ function writeFileSyncWithMessage(path, data) {
 
 const paletteCssVariables = processTokens(tokens.global.palette, tokens.global);
 const aliasCssVariables = processTokens(tokens.global.alias, tokens.global);
-const fontSizeCssVariables = processTokens(
+const typographyCssVariables = processTokens(
   tokens.global.fontSize,
-  tokens.global
+  tokens.global,
+  "typography"
 );
 
 writeFileSyncWithMessage("css/palette.css", paletteCssVariables);
 writeFileSyncWithMessage("css/alias.css", aliasCssVariables);
-writeFileSyncWithMessage("css/fontSize.css", fontSizeCssVariables);
+writeFileSyncWithMessage("css/typography.css", typographyCssVariables);
