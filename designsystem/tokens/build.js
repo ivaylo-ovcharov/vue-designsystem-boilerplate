@@ -29,22 +29,18 @@ function processTokens(obj, tokens, prefix = "", cssVariables = []) {
   return cssVariables;
 }
 
+function writeFileSyncWithMessage(path, data) {
+  fs.writeFileSync(path, `:root {\n  ${data.join("\n  ")}\n}`, "utf8");
+  console.log(`Palette CSS Variables written to ${path}`);
+}
+
 const paletteCssVariables = processTokens(tokens.global.palette, tokens.global);
 const aliasCssVariables = processTokens(tokens.global.alias, tokens.global);
-
-const paletteOutput = "css/palette.css";
-const aliasOutput = "css/alias.css";
-
-fs.writeFileSync(
-  paletteOutput,
-  `:root {\n  ${paletteCssVariables.join("\n  ")}\n}`,
-  "utf8"
+const fontSizeCssVariables = processTokens(
+  tokens.global.fontSize,
+  tokens.global
 );
-console.log(`Palette CSS Variables written to ${paletteOutput}`);
 
-fs.writeFileSync(
-  aliasOutput,
-  `:root {\n  ${aliasCssVariables.join("\n  ")}\n}`,
-  "utf8"
-);
-console.log(`Alias CSS Variables written to ${aliasOutput}`);
+writeFileSyncWithMessage("css/palette.css", paletteCssVariables);
+writeFileSyncWithMessage("css/alias.css", aliasCssVariables);
+writeFileSyncWithMessage("css/fontSize.css", fontSizeCssVariables);
