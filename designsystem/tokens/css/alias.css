@@ -1,0 +1,8 @@
+:root {
+  --sd-bg-primary-default: #EFF5FF;
+  --sd-bg-primary-hover: #EFF5FF;
+  --sd-bg-primary-focus: #EFF5FF;
+  --sd-border-primary-default: #DCE8FD;
+  --sd-border-primary-focus: #82B1F9;
+  --sd-text-primary-default: #DCE8FD;
+}
